@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+
+{% block title %} Главная страница Raymed {% endblock%}
+
+{% block main %}
+{% endblock %}
+
+{% block content %}
+<!-- <h4 align='center'>Добро пожаловать, {{user}}!</h4> -->
+<h5 align='center'>Все заявки пользователей:</h5>
+<div class="container-fluid">
+  <div class="row justify-content-center">
+    <div class="col col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-11 col-xxl-4">
+
+      <ul class="nav nav-tabs">
+        <li class="nav-item">
+          <a class="nav-link active" data-toggle="tab" href="#description">Ожидание</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" data-toggle="tab" href="#characteristics">В работе</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" data-toggle="tab" href="#opinion">Готово</a>
+        </li>
+      </ul>
+      <!-- Если статус - ОЖИДАНИЕ -->
+      <div class="tab-content">
+        <div class="tab-pane fade show active" id="description">
+          <table class="table table-hover" style="margin-top:3%">
+            <thead class="thead-light">
+              <tr align='center'>
+                <th width="10%">Время обращения</th>
+                <th style="vertical-align:middle" width="10%"><b>Пользователь</b></th>
+                <th width="10%">Устройство</th>
+                <th><b>Сообщение об ошибке</b></th>
+                <th width="5%"><b>Статус</b></th>
+                <th width="25%"><b>Решение</b></th>
+                <th width="5%"></th>
+              </tr>
+            </thead>
+            {% for error in status_wait %}
+            <tr align='center'>
+              <td><a href="{% url 'helpdesk:detail_error' error.id %}">{{error.time_post_message}}</a></td>
+              {% if error.person %}
+                <td><a href="{% url 'helpdesk:detail_error' error.id %}">{{error.person.person.display_fname}} {{error.person.person.display_lname}}</a></td>
+              {% else %}
+                <td>Сотрудник</td>
+              {% endif %}
+              {% if error.device %}
+                <td><a href="{% url 'helpdesk:detail_error' error.id %}">{{error.device.model}}</a></td>
+              {% else %}
+                <td>Другое устройство</td>
+              {% endif %}
+              <td><a href="{% url 'helpdesk:detail_error' error.id %}">{{error.message_error}}</a></td>
+              <td><a href="{% url 'helpdesk:detail_error' error.id %}">{{error.get_status_display}}</a></td>
+              <td><a href="{% url 'helpdesk:detail_error' error.id %}">{{error.solutions}}</a></td>
+              <td><a href="{% url 'helpdesk:edit_error' error.id %}"><img src="/media/images/pencil.png" alt="img" width="20px" height="20px"></a> </td>
+              
+            </tr>
+            {% endfor %}
+          </table>
+        </div>
+  <!-- Если статус - В РАБОТЕ -->
+        <div class="tab-pane fade" id="characteristics">
+          <table class="table table-hover" style="margin-top:3%">
+            <thead class="thead-light">
+              <tr align='center'>
+                <th width="10%">Время обращения</th>
+                <th style="vertical-align:middle" width="10%"><b>Пользователь</b></th>
+                <th width="10%">Устройство</th>
+                <th><b>Сообщение об ошибке</b></th>
+                <th width="5%"><b>Статус</b></th>
+                <th width="25%"><b>Решение</b></th>
+                <th width="5%"></th>
+              </tr>
+            </thead>
+            {% for error in status_work %}
+            <tr align='center'>
+              <td><a href="{% url 'helpdesk:detail_error' error.id %}">{{error.time_post_message}}</a></td>
+              {% if error.person %}
+                <td><a href="{% url 'helpdesk:detail_error' error.id %}">{{error.person.person.display_fname}} {{error.person.person.display_lname}}</a></td>
+              {% else %}
+                <td>Сотрудник</td>
+              {% endif %}
+              {% if error.device %}
+                <td><a href="{% url 'helpdesk:detail_error' error.id %}">{{error.device.model}}</a></td>
+              {% else %}
+                <td>Другое устройство</td>
+              {% endif %}
+              <td><a href="{% url 'helpdesk:detail_error' error.id %}">{{error.message_error}}</a></td>
+              <td><a href="{% url 'helpdesk:detail_error' error.id %}">{{error.get_status_display}}</a></td>
+              <td><a href="{% url 'helpdesk:detail_error' error.id %}">{{error.solutions}}</a></td>
+              <td><a href="{% url 'helpdesk:edit_error' error.id %}"><img src="/media/images/pencil.png" alt="img" width="20px" height="20px"></a> </td>
+            </tr>
+            {% endfor %}
+          </table>
+        </div>
+  <!-- Если статус - ГОТОВО -->
+        <div class="tab-pane fade" id="opinion">
+          <table class="table table-hover" style="margin-top:3%">
+            <thead class="thead-light">
+              <tr align='center'>
+                <th width="10%">Время обращения</th>
+                <th style="vertical-align:middle" width="10%"><b>Пользователь</b></th>
+                <th width="10%">Устройство</th>
+                <th><b>Сообщение об ошибке</b></th>
+                <th width="5%"><b>Статус</b></th>
+                <th width="25%"><b>Решение</b></th>
+                <th width="5%"></th>
+              </tr>
+            </thead>
+            {% for error in status_ready %}
+            <tr align='center'>
+              <td><a href="{% url 'helpdesk:detail_error' error.id %}">{{error.time_post_message}}</a></td>
+              {% if error.person.person %}
+                <td><a href="{% url 'helpdesk:detail_error' error.id %}">{{error.person.person.display_fname}} {{error.person.person.display_lname}}</a></td>
+              {% else %}
+                <td>Сотрудник</td>
+              {% endif %}
+              {% if error.device %}
+                <td><a href="{% url 'helpdesk:detail_error' error.id %}">{{error.device.model}}</a></td>
+              {% else %}
+                <td>Другое устройство</td>
+              {% endif %}
+              <td><a href="{% url 'helpdesk:detail_error' error.id %}">{{error.message_error}}</a></td>
+              <td><a href="{% url 'helpdesk:detail_error' error.id %}">{{error.get_status_display}}</a></td>
+              <td><a href="{% url 'helpdesk:detail_error' error.id %}">{{error.solutions}}</a></td>
+              <td><a href="{% url 'helpdesk:edit_error' error.id %}"><img src="/media/images/pencil.png" alt="img" width="20px" height="20px"></a> </td>
+            </tr>
+            {% endfor %}
+          </table>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

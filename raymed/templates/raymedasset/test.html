@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block title %} Информация о сотруднике {% endblock%}
+
+{% block main %}
+
+<div class="container-fluid">
+  <div class="row justify-content-center">
+    <div class="col col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-11 col-xxl-7" style="border-radius: 10px">
+      <!-- ---------------------------------------------- -->
+      <table class="table table-bordered" style = "margin-top:2%">
+        <thead class="thead-light">
+          <tr align='center'>
+            <th width="15%">ФИО</th>
+            <th width="10%">Тип устройства</th>
+            <th width="15%">Модель устройства</th>
+            <th width="15%">Серийный номер</th>
+            <th width="10%">Номер счета</th>
+            <th width="10%">Doc</th>
+          </tr>
+        </thead>
+
+        {% for i in devices %}
+          {% if i.number_account %}
+            <tr align='center'>
+              {% if i.person %}
+                <td><a href="{% url 'raymedasset:detail_person' i.person.id %}">{{i.display_person}}</a></td>
+              {% else %}
+                <td>---</td>
+              {% endif %}
+              <td>{{i.get_device_type_display}}</td>
+              <td>{{i.model}}</td>
+              <td>{{i.serial_number}}</td>
+              <td><a href="{% url 'raymedasset:see_device_for_number_account' i.number_account %}">{{i.display_number_account}}</a></td>
+              <td>{{i.closed_document}}</td>
+          {% endif %}
+        </tr>
+        {% endfor %}
+
+        {% for i in subdevices %}
+          {% if i.number_account %}
+            <tr align='center'>
+              {% if i.device.person %}
+                <td><a href="{% url 'raymedasset:detail_person' i.device.person.id %}">{{i.device.display_person}}</a></td>
+              {% else %}
+                <td>---</td>
+              {% endif %}
+              <td>{{i.get_type_display}}</td>
+              <td>{{i.model}}</td>
+              <td>{{i.serial_number}}</td>
+              <td><a href="{% url 'raymedasset:see_device_for_number_account' i.number_account %}">{{i.display_number_account}}</a></td>
+              <td>{{i.closed_document}}</td>
+          {% endif %}
+        </tr>
+        {% endfor %}
+        <hr>
+        <tr align = 'center'>
+          <td colspan="5"> <b>Всего {{count_subdevice}} единиц техники</b>  </td>
+        </tr>
+      </table>
+
+    </div>
+  </div>
+</div>
+
+{% endblock %}

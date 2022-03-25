@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+
+{% block title %} Поиск по типу устройства {% endblock%}
+
+{% block main %}
+<!-- <h4 align='center'> Поиск по номеру счета {{number_account_search}}</h4> -->
+
+<p align='center'> Вы ищите устройства по счету: <b>{{number_account_search}}</b> </p>
+
+<div class="container-fluid">
+  <div class="row justify-content-center">
+    <div class="col col-sm-6 col-md-6 col-lg-6 col-xl-9" style="border-radius: 10px">
+
+      {% if result_device or result_subdevice %}
+      <table class="table" align="center">
+        <thead class="thead-light">
+          <tr align='center'>
+            <th>ФИО</th>
+            <th>Тип устройства</th>
+            <th>Модель устройства</th>
+            <th>Серийный номер</th>
+            <th>Номер счета</th>
+            <th colspan="2">Документ</th>
+            <th></th>
+          </tr>
+        </thead>
+        {% if result_device %}
+          {% for i in result_device %}
+          <tr align='center'>
+            {% if i.person %}
+              <td><a href="{% url 'raymedasset:detail_person' i.person.id %}">{{i.display_person}}</a></td>
+            {% else %}
+              <td>-</td>
+            {% endif %}
+            <td>{{i.get_device_type_display}}</td>
+            <td>{{i.model}}</td>
+            <td>{{i.serial_number}}</td>
+            <td><a href="{% url 'raymedasset:see_device_for_number_account' i.number_account %}">{{i.display_number_account}}</a></td>
+            {% if i.closed_document %}
+              <td colspan="2"><a href="{{i.closed_document.url}}" target="_blank">Документ</a></td>
+            {% else %}
+            <td colspan="2">Отсутствует</td>
+            {% endif %}
+          <td><a href="{% url 'raymedasset:transfer_device' i.id %}"><img src="/media/images/pencil.png" alt="img" width="20px" height="20px"></a> </td>
+          </tr>
+          {% endfor %}
+        {% endif %}
+
+        {% if result_subdevice %}
+          {% for i in result_subdevice %}
+          <tr align='center'>
+            {% if i.device.person %}
+              <td><a href="{% url 'raymedasset:detail_person' i.device.person.id %}">{{i.device.display_person}}</a></td>
+            {% else %}
+              <td>-</td>
+            {% endif %}
+            <td>{{i.get_type_display}}</td>
+            <td>{{i.model}}</td>
+            <td>{{i.serial_number}}</td>
+            <td><a href="{% url 'raymedasset:see_device_for_number_account' i.number_account %}">{{i.display_number_account}}</a></td>
+            {% if i.closed_document %}
+            <td colspan="2"><a href="{{i.closed_document.url}}" target="_blank">Документ</a></td>
+            {% else %}
+            <td colspan="2">Отсутствует</td>
+            {% endif %}
+          <td><a href="{% url 'raymedasset:transfer_device' i.id %}"><img src="/media/images/pencil.png" alt="img" width="20px" height="20px"></a> </td>
+          </tr>
+          {% endfor %}
+        {% endif %}
+
+
+      </table>
+
+      {% else %}
+        <p>Такого счета в Базе Данных нет</p>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+
+{% endblock %}

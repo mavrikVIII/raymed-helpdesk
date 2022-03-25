@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+
+{% block title %} Устройства без владельца {% endblock%}
+
+{% block main %}
+
+<div class="container-fluid">
+  <div class="row justify-content-center">
+    <div class="col col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-10 col-xxl-7" style="border-radius: 10px">
+      <table class="table table-hover" style = "margin-top:2%" align='center'>
+        <thead class="thead-light">
+          <tr align='center'>
+            <th width='1%'> </th>
+            <th width="10%">Тип устройства</th>
+            <th width="15%">Модель устройства</th>
+            <th width = "25%">Описание</th>
+            <th width="15%">Серийный номер</th>
+            <th  width="10%">Номер счета</th>
+            <th width='7%'>Закр. док-т</th>
+            <th width="1%"></th>
+          </tr>
+        </thead>
+
+        {% for device in all_deviced_without_person %}
+          <tr align='center'>
+            {% if device.device_type == "monoblock" or  device.device_type == "laptop" or  device.device_type == "desktop"  %}
+              <td><a href="{% url 'raymedasset:add_subdevice' device.id %}"><img src="/media/images/plus.png" alt="img" width="20px" height="20px"></a></td>
+            {% else %}
+              <td></td>
+            {% endif %}
+            <td><a href="{% url 'raymedasset:see_all_this_type_device' device.device_type %}">{{device.get_device_type_display}}</a></td>
+            <td>{{device.model}}</td>
+            <td>{{device.descriptions}}</td>
+            <td>{{device.serial_number}}</td>
+            {% if device.number_account %}
+              <td><a href="{% url 'raymedasset:see_device_for_number_account' device.number_account %}">{{device.display_number_account}}</a></td>
+            {% else %}
+              <td >-</td>
+            {% endif %}
+            {% if device.closed_document %}
+              <td><a href="{{device.closed_document.url}}">Документ</a></td>
+            {% else %}
+              <td>Отсутствует</td>
+            {% endif %}
+          <td><a href="{% url 'raymedasset:transfer_device' device.id %}"><img src="/media/images/pencil.png" alt="img" width="20px" height="20px"></a> </td>
+          </tr>
+          <!-- Если устройству добавляли комплектующие -->
+          {% if device.subdevice_set.all %}
+            {% for j in device.subdevice_set.all %}
+            <tr align='center'>
+              <td></td>
+              <td></td>
+              <td><b>{{j.get_type_display}}</b> {{j.model }}</td>
+              <td>{{j.descriptions}}</td>
+              <td> {{j.serial_number}}</td>
+              {% if j.number_account %}
+                  <td><a href="{% url 'raymedasset:see_device_for_number_account' j.number_account %}">{{j.display_number_account}}</a></td>
+              {% else %}
+                  <td>-</td>
+              {% endif %}
+              {% if j.closed_document %}
+                  <td><a href="{{j.closed_document.url}}" target="_blank">Документ</a></td>
+              {% else %}
+                  <td>Отсутствует</td>
+              {% endif %}
+
+              {% if not is_hr %}
+                  <td><a href="{% url 'raymedasset:transfer_subdevice' j.id %}"><img src="/media/images/pencil.png" alt="img" width="20px" height="20px"></a> </td>
+              {% endif %}
+            </tr>
+            {% endfor %}
+          {% endif %}
+
+
+        {% endfor %}
+        <hr>
+        <tr align = 'center'>
+          <td colspan="8"> <b>Всего {{count_device}} единиц техники</b>  </td>
+        </tr>
+      </table>
+
+    </div>
+  </div>
+</div>
+
+{% endblock %}

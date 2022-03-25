@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block title %} Добавление сотрудника {% endblock%}
+
+{% block main %}
+<div class="container-fluid">
+  <!-- Content here -->
+  <div class="row justify-content-center">
+
+    <div class="col col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-5 col-xxl-6">
+      <h4 align='center'>Добавить сотрудника</h4>
+      <form action="{% url 'raymedasset:add_person_page' %}" method="post" enctype="multipart/form-data" class="mt-3 ml-3">
+        {% csrf_token %}
+        <table>
+       {% for field in form %}
+        <div class="form-group">
+         {{ field.label_tag}} {{field}}
+         <small class="text-danger">{{ field.errors }}</small>
+         <small class="text-dark"> {{field.help_text}}</small>
+        </div>
+       {% endfor %}
+        </table>
+          <button type="submit" name="button" class="btn btn-block btn-success">Добавить</button>
+      </form>
+    </div>
+    <br>
+  </div>
+  <br>
+</div>
+{% endblock %}

@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+<html lang="en">
+
+<head>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>
+    {% block title %}
+    Django Authentication Example
+    {% endblock%}
+  </title>
+</head>
+
+{% block upper%}
+{% endblock %}
+
+<body>
+  {% block main%}
+
+  <div class="container-fluid" style="margin-top: 15%">
+
+    <div class="row justify-content-center">
+
+      <div class="col col-sm-12 col-md-12 col-lg-4 col-xl-4 col-xxl-4">
+        <form method="POST">
+          {% csrf_token %}
+          <h3 align='center'>Вход в RaymedAsset</h3>
+          <input type="text" style="width:100%" class="form-control mb-2 mr-sm-2" required placeholder="Логин" name="login">
+          <input type="password" style="width:100%" class="form-control mb-2 mr-sm-2" required placeholder="Пароль" name="password">
+          <button type="submit" style="width:100%" class="btn btn-success my-2 my-sm-0">Войти</button>
+          <br><br>
+          {% if visible %}
+          <div class="alert alert-danger" role="alert" >
+            <strong>Внимание!</strong> Неправильный логин или пароль!
+          </div>
+          {% endif %}
+        </form>
+      </div>
+
+    </div>
+
+  </div>
+
+  <br>
+
+
+  {% endblock %}
+
+
+  {%block content%}
+  {% endblock %}
+
+
+  {% block footer%}
+  {%endblock%}
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+</body>
+
+
+</html>

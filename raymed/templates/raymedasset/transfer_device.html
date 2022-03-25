@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block title %} Добавление устройства {% endblock%}
+
+{% block main %}
+
+
+<div class="container-fluid">
+  <!-- Content here -->
+
+  <div class="row justify-content-center">
+
+    <div class="col col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-5 col-xxl-6">
+      <h4 align='center' style="margin-top:0.5%">Изменить</h4>
+
+      <form action="{% url 'raymedasset:transfer_device' device_id %}" method="post" enctype="multipart/form-data" class="mt-3 ml-3" style="margin-bottom:-20%">
+        {% csrf_token %}
+        <table>
+          {% for field in form %}
+          <div class="form-group">
+            {{ field.label_tag}} {{field}}
+            <small class="text-danger">{{ field.errors }}</small>
+            <small class="text-dark"> {{field.help_text}}</small>
+          </div>
+          {% endfor %}
+
+        </table>
+        <div class="row">
+          <div class="col">
+            <button type="submit" name="button" class="btn btn-block btn-success" width="20">Изменить</button>
+          </div>
+          <div class="col">
+            <a class="btn btn-block btn-success" href="{% url 'raymedasset:delete_device' device_id %}">Удалить</a>
+          </div>
+        </div>
+      </form>
+
+
+    </div>
+
+  </div>
+
+
+  {% endblock %}

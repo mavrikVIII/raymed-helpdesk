@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block title %} Информация о сотруднике {% endblock%}
+
+{% block main %}
+
+<!-- Если пользователь не из кадров то -->
+{% if not is_hr %}
+<div class="container-fluid">
+  <div class="row justify-content-center">
+
+      <div class="col col-sm-6 col-md-6 col-lg-6 col-xl-9" style="border-radius: 10pxl; margin-top:2%">
+      <table class="table" align="center">
+          <thead class="thead-light">
+            <tr align='center'>
+              <th>Устройство</th>
+              <th>Бывший владелец</th>
+              <th>Текущий владелец</th>
+              <th>Когда получил тенику</th>
+              <th>Когда отдал технику</th>
+            </tr>
+          </thead>
+          {% for i in history_device %}
+          <tr align='center'>
+            <td>{{i.device.model}}</td>
+            {% if i.old_person == None %}
+              <td></td>
+            {% else %}
+              <td><a href="{% url 'raymedasset:detail_person' i.old_person.id %}">{{i.old_person.display_fname}} {{i.old_person.display_lname}}</a></td>
+            {% endif %}
+
+            <td><a href="{% url 'raymedasset:detail_person' i.current_person.id %}">{{i.current_person.display_fname}} {{i.current_person.display_lname}}</a></td>
+            <td>{{i.date_get_device}}</td>
+            {% if i.date_receive_device == None %}
+              <td>По настоящий день</td>
+            {% else %}
+            <td>{{i.date_receive_device}}</td>
+            {% endif %}
+          </tr>
+          {% endfor %}
+        </div>
+  </div>
+</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block title %} Поиск по типу устройства {% endblock%}
+
+{% block main %}
+<h4 align='center'> Поиск по отделу: {{name_department}}</h4>
+
+<div class="container-fluid">
+  <div class="row justify-content-center">
+    <div class="col col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-10 col-xxl-6" style="border-radius: 10px">
+      <table class="table">
+        <thead class="thead-light">
+          <tr align='center'>
+            <th>Фамилия</th>
+            <th>Имя</th>
+            <th>Отчество</th>
+            <th>Отдел</th>
+          </tr>
+        </thead>
+        {% for i in list_department %}
+        <tr align='center'>
+          <td><a href="{% url 'raymedasset:detail_person' i.id %}">{{i.display_lname}}</a></td>
+          <td><a href="{% url 'raymedasset:detail_person' i.id %}">{{i.display_fname}}</a></td>
+          <td><a href="{% url 'raymedasset:detail_person' i.id %}">{{i.display_mname}}</a></td>
+          {% if i.department %}
+              <td>{{i.get_department_display}}</td>
+          {% else %}
+              <td>-</td>
+          {% endif %}
+        </tr>
+        {% endfor %}
+      </table>
+      <hr>
+      <h4 align="center"> В отделе насчитывается {{count_person_department}} сотрудников </h4>
+    </div>
+
+  </div>
+</div>
+
+
+{% endblock %}

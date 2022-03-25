@@ -1,0 +1,271 @@
+{% extends 'base.html' %}
+
+{% block title %} Главная страница Raymed {% endblock%}
+
+{% block main %}
+{% endblock %}
+
+{% block content %}
+{% if is_buh %}
+  <h4 align='center'>Добро пожаловать, {{user_name.display_fname}} {{user_name.display_lname}}!</h4>
+{% else %}
+  <h4 align='center'>Добро пожаловать, {{username}}!</h4>
+{% endif %}
+<h5 align='center'>Список недавно добавленных сотрудников компании Raymed </h5>
+
+<!-- Таблица сотрудников с количеством техники, которые числяться на них -->
+{% if not is_hr %}
+<div class="container-fluid">
+  <div class="row justify-content-center">
+    <div class="col col-sm-6 col-md-6 col-lg-6 col-xl-7" style="border-radius: 10px">
+      <br>
+      {% if is_buh %}
+      <div style = 'margin-bottom:1%'>
+        <a class="btn btn-info" href="{% url 'helpdesk:index_for_buh' user_name.id %}" >Посмотреть свою технику</a> <br>
+      </div>
+
+      {% endif %}
+      <table class="table" align="center">
+        <thead class="thead-light">
+          <tr align="center">
+            <th>Фамилия</th>
+            <th>Имя</th>
+            <th>Отчество</th>
+            {% if is_admin or is_hr %}
+              <th width='20%'>Количество техники</th>
+            {% endif %}
+          </tr>
+        </thead>
+        <tbody>
+          {% for i in all_person %}
+          <tr align="center">
+            <td><a href="{% url 'raymedasset:detail_person' i.id %}"> {{i.display_lname}} </a></td>
+            <td><a href="{% url 'raymedasset:detail_person' i.id %}"> {{i.display_fname}} </a></td>
+            <td>
+              {% if i.middle_name %}
+              <a href="{% url 'raymedasset:detail_person' i.id %}"> {{i.display_mname}} </a>
+              {% else %}
+              -
+              {% endif %}
+            </td>
+            {% if is_admin %}
+              <td> {{i.device_set.count }}</td>
+            {% endif %}
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <!-- Таблица для поисковой формы -->
+  <br>
+  {% if is_admin %}
+  <div class="row justify-content-center">
+    <div class="col col-sm-6 col-md-6 col-lg-6 col-xl-6 alert alert-info" role="alert" align="center">
+      Вы можете выполнить поиск по <b>имени сотрудника</b>, по <b>типу устройства</b> или <b>номеру счета.</b>
+    </div>
+  </div>
+  {% elif is_buh %}
+  <div class="row justify-content-center">
+    <div class="col col-sm-6 col-md-6 col-lg-6 col-xl-6 alert alert-info" role="alert" align="center">
+      Вы можете выполнить поиск по <b>имени сотрудника </b> или по <b>номеру счета.</b>
+    </div>
+  </div>
+  {% endif %}
+
+  {% if is_admin %}
+  <!-- Если пользователь в группе админс, то может выполнить поиск по ФИО и  технике и по номеру счета-->
+  <div class="row justify-content-center">
+    <div class="col col-sm-10 col-md-8 col-lg-6 col-xl-6">
+      <form action="{% url 'raymedasset:search' %}" method="POST">
+        {% csrf_token %}
+        <div class="d-flex justify-content-center">
+          <div class="w-50 mb-2 mr-2">
+            <input type="text" class="form-control mb-2 mr-sm-5 xl-3" style="width:100%" placeholder="Поиск" name="search_input">
+          </div>
+          <div class="w-25 ">
+            <select name="select_search">
+              <option value="name">ФИО</option>
+              <option value="number_account">Номер счета</option>
+              <option value="serial_number">Серийный номер</option>
+            </select>
+          </div>
+
+          <div class="w-25 ml-4">
+            <button type="submit" class="btn btn-success mb-2 w-100">Найти</button>
+          </div>
+        </div>
+      </form>
+
+      <form class="form-inline justify-content-center" action="{% url 'raymedasset:search_for_type_device' %}" method="POST">
+          {% csrf_token %}
+          <div class="w-75">
+            <select class="form-control mb-2 mr-2" style="width:98%" name="search_type_device" style='width:70%'>
+              <option value="laptop">Ноутбук</option>
+              <option value="desktop">Стационарный ПК</option>
+              <option value="monoblock">Моноблок</option>
+              <option value="monitor">Монитор</option>
+              <option value="externaldisk">Внешний жесткий диск</option>
+              <option value="flashdrive">Флешка</option>
+              <option value="other">Другое</option>
+            </select>
+          </div>
+          <div class="w-25">
+              <button type="submit" class="btn btn-success mb-2 w-100">Найти</button>
+          </div>
+        </form>
+
+        <form class="form-inline justify-content-center" action="{% url 'raymedasset:search_for_department' %}" method="POST" style = 'margin-top:1%'>
+          {% csrf_token %}
+          <div class="w-75">
+            <select class="form-control mb-2 mr-2" style="width:98%" name="search_department" style='width:70%; margin-bottom:1%'>
+              <option value="sekretary">Секретариат</option>
+              <option value="buhgaltery">Бухгалтерия</option>
+              <option value="ekonom">Эконом.отдел</option>
+              <option value="legal">Правовой</option>
+              <option value="registration">Регистрации и сертификации</option>
+              <option value="hr">Управление персоналом</option>
+              <option value="tender">Тендерный</option>
+              <option value="warehouse">Склад</option>
+              <option value="transport">Транспортный</option>
+              <option value="logistics">Логистика</option>
+              <option value="purchases">Закупки</option>
+              <option value="security">Безопасность</option>
+              <option value="ahch">АХЧ</option>
+              <option value="it">IT</option>
+              <option value="production">Производство</option>
+            </select>
+          </div>
+          <div class="w-25">
+            <button type="submit" class="btn btn-success mb-2 w-100">Найти</button>
+          </div>
+        </form>
+
+
+    </div>
+  </div>
+  <br>
+  {% endif %}
+
+  <!-- Если пользователь из бухгалтерии, то может выполнить поиск по ФИО и номеру счета -->
+  {% if is_buh %}
+  <div class="row justify-content-center">
+    <div class="col col-sm-10 col-md-8 col-lg-6 col-xl-6">
+      <form class="form-inline justify-content-center" action="{% url 'raymedasset:search_for_name' %}" method="POST">
+        {% csrf_token %}
+        <div class="w-75">
+          <input type="text"  class="form-control mb-2 mr-2" style="width:98%" placeholder="Имя или Фамилия" name="search_first_name">
+        </div>
+        <div class="w-25">
+          <button type="submit" class="btn btn-success mb-2 w-100">Найти</button>
+        </div>
+        </form>
+
+        <hr>
+        <form class="form-inline justify-content-center" action="{% url 'raymedasset:search_for_number_account' %}" method="POST">
+          {% csrf_token %}
+          <div class="w-75">
+            <input type="text" style="width:98%" class="form-control mb-2 mr-sm-2" placeholder="Номер счета" name="search_for_number_account">
+          </div>
+          <div class="w-25">
+            <button type="submit" class="btn btn-success mb-2 w-100">Найти</button>
+          </div>
+        </form>
+    </div>
+  </div>
+  <br>
+
+  {% endif %}
+</div>
+
+<!-- Если пользователь из отдела кадров -->
+{% else %}
+<div class="container-fluid text-center">
+  <div class="row content">
+    <div class="col-sm-3 sidenav">
+    </div>
+
+    <div class="col-sm-6 text-left">
+      <table class="table" align="center">
+        <thead class="thead-light">
+          <tr align="center">
+            <!-- <th width="5%">id</th> -->
+            <th>Фамилия</th>
+            <th>Имя</th>
+            <th>Отчество</th>
+            {% if is_admin %}
+            <th width='20%'>Количество техники</th>
+            {% endif %}
+            <th> Отдел </th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for i in all_person %}
+          <tr align="center">
+            <td><a href="{% url 'raymedasset:detail_person' i.id %}"> {{i.last_name}} </a></td>
+            <td><a href="{% url 'raymedasset:detail_person' i.id %}"> {{i.first_name}} </a></td>
+            <td>
+              {% if i.middle_name %}
+              <a href="{% url 'raymedasset:detail_person' i.id %}"> {{i.middle_name}} </a>
+              {% else %}
+              -
+              {% endif %}
+            </td>
+            {% if is_admin %}
+            <td> {{i.device_set.count }}</td>
+            {% endif %}
+            {% if is_hr %}
+              <td>{{i.get_department_display}}</td>
+            {% endif %}
+          </tr>
+
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="col col-sm-3 sidenav">
+      <div class="alert alert-primary" role="alert">
+        Ближайшие дни рождения
+      </div>
+      <h6></h6>
+      <table class="table table-sm table-borderless" width="100%">
+        <tbody>
+          {% for person in all_person_sort_birthday %}
+            {% if person.soon_birthday %}
+              <tr style="border: none">
+                <td style="border: none">{{person.last_name}} {{person.first_name}}</td>
+                <td style="border: none">{{person.date_birthday}}</td>
+              </tr>
+            {% endif %}
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="row justify-content-center">
+    <div class="col col-sm-10 col-md-8 col-lg-6 col-xl-4">
+      <div class="alert alert-info" role="alert">
+        Поиск сотрудника по <b>имени/фамилии</b>
+      </div>
+      <form class="form-inline justify-content-center" action="{% url 'raymedasset:search_for_name' %}" method="POST">
+        {% csrf_token %}
+        <div class="w-75">
+          <input type="text"  class="form-control mb-2 mr-2" style="width:98%" placeholder="Имя или Фамилия" name="search_first_name">
+          <!-- <input type="text" class="form-control mb-2" style="width:48%" placeholder="Фамилия" name="search_last_name"> -->
+        </div>
+        <div class="w-25">
+          <button type="submit" class="btn btn-success mb-2 w-100">Найти</button>
+        </div>
+
+        </form>
+    </div>
+  </div>
+
+
+</div>
+
+{% endif %}
+
+{% endblock %}

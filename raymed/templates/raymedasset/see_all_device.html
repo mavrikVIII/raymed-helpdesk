@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block title %} Информация о сотруднике {% endblock%}
+
+{% block main %}
+
+<div class="container-fluid">
+  <div class="row justify-content-center">
+    <div class="col col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-11 col-xxl-7" style="border-radius: 10px">
+
+
+      <!-- ---------------------------------------------- -->
+      <table class="table table-bordered" style = "margin-top:2%">
+        <thead class="thead-light">
+          <tr align='center'>
+            <th width="15%">ФИО</th>
+            <th width="10%">Тип устройства</th>
+            <th width="15%">Модель устройства</th>
+            <th width="15%">Серийный номер</th>
+
+            <th width="10%">Номер счета</th>
+          </tr>
+        </thead>
+
+        {% for device in all_deviced %}
+        <tr align='center'>
+          {% if device.person %}
+          <td><a href="{% url 'raymedasset:detail_person' device.person.id %}">{{device.display_person}}</a></td>
+          {% else %}
+          <td>---</td>
+          {% endif %}
+          <td>{{device.get_device_type_display}}</td>
+          <td>{{device.model}}</td>
+          <td>{{device.serial_number}}</td>
+
+          {% if device.number_account %}
+            <td><a href="{% url 'raymedasset:see_device_for_number_account' device.number_account %}">{{device.display_number_account}}</a></td>
+          {% else %}
+            <td>-</td>
+          {% endif %}
+        </tr>
+        {% endfor %}
+        <hr>
+        <tr align = 'center'>
+          <td colspan="5"> <b>Всего {{count_device}} единиц техники</b>  </td>
+        </tr>
+      </table>
+
+    </div>
+  </div>
+</div>
+
+{% endblock %}

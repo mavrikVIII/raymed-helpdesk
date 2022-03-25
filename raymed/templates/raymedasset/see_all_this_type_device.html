@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block title %} Поиск по типу устройства {% endblock%}
+
+{% block main %}
+<h4 align='center'> Поиск по типу устройства.</h4>
+
+<div class="container-fluid">
+  <div class="row justify-content-center">
+    <div class="col col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-10 col-xxl-6" style="border-radius: 10px">
+      <table class="table">
+        <thead class="thead-light">
+          <tr align='center'>
+            <th>Тип устройства</th>
+            <th>Модель</th>
+            <th>Сотрудик</th>
+            <th>Отдел</th>
+          </tr>
+        </thead>
+        {% for i in list_device %}
+        <tr align='center'>
+          <td>{{i.get_device_type_display}}</td>
+          <td>{{i.model}}</td>
+          {% if i.person %}
+              <td>{{i.display_person}}</td>
+          {% else %}
+              <td>-</td>
+          {% endif %}
+
+          {% if i.person.department %}
+            <td><a href="{% url 'raymedasset:see_all_this_department' i.person.department %}">{{i.person.get_department_display}}</a></td>
+          {% else %}
+            <td>-</td>
+          {% endif %}
+        </tr>
+        {% endfor %}
+      </table>
+      <hr>
+      <h4 align="center"> В Raymed насчитывается {{count_device}} устройств </h4>
+    </div>
+
+  </div>
+</div>
+
+
+{% endblock %}

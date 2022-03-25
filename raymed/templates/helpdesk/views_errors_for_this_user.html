@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block title %} Все Ваши заявки {% endblock%}
+
+{% block main %}
+{% endblock %}
+
+{% block content %}
+<!-- <h4 align='center'>Добро пожаловать, {{user}}!</h4> -->
+<h5 align='center' style= 'margin-top:3%'>Все ваши заявки:</h5>
+<div class="container-fluid">
+<div class="row justify-content-center">
+  <div class="col col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-9 col-xxl-4">
+    <table class="table table-hover" style="margin-top:3%" >
+      <thead class="thead-light">
+        <tr align='center'>
+          <th>Тип устройства</th>
+          <th style ="vertical-align:middle" width="15%"><b>Устройство</b></th>
+          <th><b>Сообщение об ошибке</b></th>
+          <th width="10%"><b>Статус</b></th>
+          <th width="25%"><b>Время обращения</b></th>
+        </tr>
+      </thead>
+      {% for er in user_error %}
+      <tr align = 'center'>
+        {% if er.device %}
+          <td>{{er.device.get_device_type_display}}</td>
+          <td>{{er.device.model}}</td>
+        {% else %}
+          <td>Другое устройство</td>
+          <td>Другое устройство</td>
+        {% endif %}
+        <td>{{er.message_error}}</td>
+        <td>{{er.get_status_display}}</td>
+        <td>{{er.time_post_message}}</td>
+      </tr>
+      {% endfor %}
+    </table>
+  </div>
+  </div>
+
+  </div>
+{% endblock %}

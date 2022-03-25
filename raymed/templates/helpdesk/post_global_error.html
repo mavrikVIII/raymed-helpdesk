@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block title %} Сообщить о неисправности {% endblock%}
+
+{% block main %}
+{% endblock %}
+
+{% block content %}
+<!-- <h5 align='center' style ="margin-top:5%">Вы собираетесь сообщить о неисправности устройства </h5> -->
+<h4 align='center' style ="margin-top:5%">Сообщить о ошибке: </h4>
+<div class="container-fluid">
+<div class="row justify-content-center">
+  <div class="col col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-9 col-xxl-4">
+    <h6 align='left' style ="margin-top:1%">Выберите пожалуйста устройство c ошибкой:</h6>
+    <select class="form-control mb-2 mr-2" name="show_device_this_person" id = "show_device_this_person">
+      <option value="other_device">Другое устройство</option>
+      {% for device in devices_this_person %}
+      <option value="{{device.id}}">{{device.get_device_type_display}} {{device.model}}</option>
+      {% endfor %}
+    </select>
+
+    <form action="{% url 'helpdesk:post_global_error' %}" method="POST" enctype="multipart/form-data" class="mt-3 ml-3" style="margin-bottom:-20%">
+      {% csrf_token %}
+
+      <table align= 'center'>
+        {% for field in form %}
+        <table>
+          <tr align='center'>
+            <td width='20%'>{{ field.label_tag}} </td>
+            <td>{{field}}</td>
+          </tr>
+        </table>
+
+        {% endfor %}
+        <h6>Вы можете приложить скриншот ошибки</h6>
+      </table>
+      <div class="row"  style ="margin-top:1%" >
+        <div class="col">
+        <button onclick = 'this.form.submit(); btn1.disabled = true;' id ='btn1', type="submit" name="button" class="btn btn-block btn-success">Отправить</button>
+        </div>
+      </div>
+    </form>
+
+
+  </div>
+  </div>
+
+  </div>
+{% endblock %}

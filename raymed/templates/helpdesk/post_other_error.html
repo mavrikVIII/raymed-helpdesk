@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block title %} Сообщить о неисправности {% endblock%}
+
+{% block main %}
+{% endblock %}
+
+{% block content %}
+<h5 align='center' style ="margin-top:5%">Вы собираетесь сообщить о неисправности. </h5>
+<h5 align='center' style ="margin-top:1%">Сообщить о ошибке: </h5>
+<div class="container-fluid">
+<div class="row justify-content-center">
+  <div class="col col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-9 col-xxl-4">
+    <form action="{% url 'helpdesk:post_other_error'%}" method="post" enctype="multipart/form-data" class="mt-3 ml-3" style="margin-bottom:-20%">
+      {% csrf_token %}
+      <table align= 'center'>
+        {% for field in form %}
+        <table>
+          <tr align='center'>
+            <td width='20%'>{{ field.label_tag}} </td>
+            <td>{{field}}</td>
+          </tr>
+        </table>
+        <!-- <div class="form-group">
+          {{ field.label_tag}} {{field}}
+          <small class="text-danger">{{ field.errors }}</small>
+          <small class="text-dark"> {{field.help_text}}</small>
+        </div> -->
+        {% endfor %}
+
+      </table>
+      <h6>Вы можете приложить скриншот ошибки</h6>
+      <div class="row"  style ="margin-top:1%" >
+        <div class="col">
+        <script>
+          function clicked(){
+          var btn1 = document.getElementById("btn1");
+          alert("Ваша заявка отправлена.")
+          btn1.disabled = true;
+          }
+      </script>
+        <button onclick = 'this.form.submit(); clicked()' id ='btn1', type="submit" name="button" class="btn btn-block btn-success">Отправить</button>
+        </div>
+      </div>
+    </form>
+
+
+  </div>
+  </div>
+
+  </div>
+{% endblock %}

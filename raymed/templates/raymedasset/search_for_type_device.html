@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block title %} Поиск по типу устройства {% endblock%}
+
+{% block main %}
+<h4 align='center'> Поиск по типу устройства</h4>
+
+<p align='center'> Вы ищите устройства типа: <b>{{search_type_device}}</b> </p>
+
+<div class="container-fluid">
+  <div class="row justify-content-center">
+    <div class="col col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-10 col-xxl-6" style="border-radius: 10px">
+
+      <table class="table">
+        <thead class="thead-light">
+          <tr align='center'>
+            <th>ФИО</th>
+            <th>Тип устройства</th>
+            <th>Модель устройства</th>
+            <th>Серийный номер</th>
+            <th>Описание</th>
+            <th>Номер счета</th>
+          </tr>
+        </thead>
+
+        {% for i in list_search_type_device %}
+        <tr align='center'>
+          {% if i.person %}
+            <td><a href="{% url 'raymedasset:detail_person' i.person.id %}">{{i.display_person}}</a></td>
+          {% else %}
+            <td>---</td>
+          {% endif %}
+          <td>{{i.get_device_type_display}}</td>
+          <td>{{i.model}}</td>
+          <td>{{i.serial_number}}</td>
+          <td>{{i.descriptions}}</td>
+          {% if i.number_account %}
+            <td><a href="{% url 'raymedasset:see_device_for_number_account' i.number_account %}">{{i.display_number_account}}</a></td>
+          {% else %}
+            <td>-</td>
+          {% endif %}
+
+        </tr>
+        {% endfor %}
+
+      </table>
+
+      <hr>
+      <h4 align="center"> В Raymed всего насчитывается {{count_type_device}} {{search_type_device}} </h4>
+    </div>
+
+  </div>
+</div>
+{{test}}
+
+{% endblock %}

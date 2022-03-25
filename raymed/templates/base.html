@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>
+    {% block title %}
+    Django Authentication Example
+    {% endblock%}
+  </title>
+</head>
+<style>
+  input[type=text],
+  input[type=number],
+  select {
+    display: block;
+    width: 100%;
+    height: calc(1.5em + .75rem + 2px);
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #495057;
+    background-color: c7c7c7;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius: .25rem;
+    font: color:red;
+    transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+  }
+
+  input[type=file] {
+    display: block;
+    width: 100%
+  }
+
+  body {
+    /* Градиент */
+    background: linear-gradient(#c6dcf5, #0777f7) fixed;
+  }
+
+  a {
+    color: black;
+  }
+
+  a:hover {
+    color: red;
+  }
+</style>
+
+<body>
+  {% block upper%}
+  <div style="min-width:100%">
+        <nav class="navbar navbar-expand-lg sticky-top" style="background-color: #6c71cc;">
+          <a class="navbar-brand" href="{% url 'registration:index'%}" style="color:black">Главная</a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+              {% if not is_buh %}
+              {% if is_admin or is_hr %}
+              <li>
+                <div class="dropdown">
+                  <button class="btn btn-link dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color:black">
+                    Сотрудники
+                  </button>
+                  <div class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                    <a class="dropdown-item" href="{% url 'raymedasset:add_person_page' %}">Добавить сотрудника</a>
+                    <a class="dropdown-item" href="{% url 'raymedasset:see_all_person' %}">Показать всех сотрудников</a>
+                  </div>
+                </div>
+              </li>
+              {% endif %}
+              {% endif %}
+              {% if is_admin %}
+              <li>
+                <div class="dropdown">
+                  <button class="btn btn-link dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color:black">
+                    Устройства
+                  </button>
+                  <div class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                    <a class="dropdown-item" href="{% url 'raymedasset:add_device_page' %}">Добавить устройство</a>
+                    <a class="dropdown-item" href="{% url 'raymedasset:see_all_device' %}">Показать все устройства</a>
+                    <a class="dropdown-item" href="{% url 'raymedasset:see_device_without_person' %}">Показать устройства без владельца</a>
+                    <a class="dropdown-item" href="{% url 'raymedasset:see_all_subdevice' %}">Показать все комплеутющие</a>
+                    <a class="dropdown-item" href="{% url 'raymedasset:test' %}">Test</a>
+                  </div>
+                </div>
+              </li>
+              {% endif %}
+              {% if is_buh %}
+              <li>
+                <div class="dropdown">
+                  <button class="btn btn-link dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color:black">
+                    Список устройств/сотрудников
+                  </button>
+                  <div class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                    <a class="dropdown-item" href="{% url 'raymedasset:see_all_person' %}">Показать всех сотрудников</a>
+                    <a class="dropdown-item" href="{% url 'raymedasset:see_all_device' %}">Показать все устройства</a>
+                    <a class="dropdown-item" href="{% url 'raymedasset:see_device_without_person' %}">Показать устройства без владельца</a>
+                  </div>
+                </div>
+              </li>
+              {% endif %}
+            </ul>
+            {% if is_admin %}
+            <!-- <a class="btn btn-warning my-2 my-sm-0" href="{% url 'helpdesk:view_all_errors' %}">HelpDesk</a>
+            <a class="btn btn-success my-2 my-sm-0" href="{% url 'admin:index' %}">Админка</a> -->
+            <a class="navbar-brand btn btn-warning my-2 my-sm-0" href="{% url 'helpdesk:view_all_errors'%}" style="color:black">HelpDesk</a>
+            <a class="navbar-brand btn btn-success my-2 my-sm-0" href="{% url 'admin:index'%}" style="color:black">Админка</a>
+            {% endif %}
+            <a class="navbar-brand btn btn-danger my-2 my-sm-0" href="{% url 'registration:logout'%}" style="color:black">Выход</a>
+            <!-- <a class="btn btn-danger my-2 my-sm-0" href="{% url 'registration:logout' %}">Выйти</a> -->
+        </nav>
+      </div>
+  </div>
+
+    {% endblock %}
+    {% block main  %}
+
+    {% endblock %}
+
+    {%block content%}
+    {% endblock %}
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+</body>
+
+
+</html>

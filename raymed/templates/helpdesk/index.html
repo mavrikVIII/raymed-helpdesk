@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block title %} Главная страница Raymed {% endblock%}
+
+{% block main %}
+{% endblock %}
+
+{% block content %}
+<h4 align='center'>Добро пожаловать {{user_1.display_lname}} {{user_1.display_fname}}!</h4>
+<div class="container-fluid">
+<div class="row justify-content-center">
+  <div class="col col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-9 col-xxl-4">
+      <table class="table table-hover" style="margin-top:3%" >
+        <thead class="thead-light">
+          <tr align='center'>
+
+            <th style ="vertical-align:middle" width="15%"><b>Тип устройства</b></th>
+            <th width="30%"><b>Модель устройства</b></th>
+            <th width="30%"><b>Серийный номер</b></th>
+          </tr>
+        </thead>
+        {% for device in user_1.device_set.all %}
+        <tr align = 'center'>
+            <td>{{device.get_device_type_display}}</td>
+            <td>{{device.model}}</td>
+            <td>{{device.serial_number}}</td>
+        </tr>
+        {% endfor %}
+      </table>
+      {% if not is_admin and not is_buh and not is_hr %}
+        <div class="row">
+            <div class="col col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4 col-xxl-4">
+              <a class="btn btn-warning my-2 my-sm-0" href="{% url 'helpdesk:post_global_error' %}"><b>Сообщить о неисправности</b></a>
+          </div>
+            <div class="col col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 col-xxl-4">
+
+          </div>
+            <div class="col col-xs-12 col-sm-12 col-md-12 col-lg-2 col-xl-2 col-xxl-4">
+            <a class="btn btn-info my-2 my-sm-0" href="{% url 'helpdesk:views_errors_for_this_user' user_1.id %}"><b>Посмотреть статус Ваших заявок</b></a>
+          </div>
+
+        </div>
+      {% endif %}
+
+
+  </div>
+  </div>
+  </div>
+{% endblock %}

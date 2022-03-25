@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block title %} Сообщить о неисправности {% endblock%}
+
+{% block main %}
+{% endblock %}
+
+{% block content %}
+<h5 align='center' style ="margin-top:5%">Неисправность устройства {{error.device.get_device_type_display}} {{error.device.model}}. </h5>
+<div class="container-fluid">
+<div class="row justify-content-center">
+  <div class="col col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-9 col-xxl-4">
+<div class="" style="margin-top:2%">
+  <p><b>Дата формирования заявки: </b>{{error.time_post_message}}</p>
+  <p><b>Сотрудник: </b>{{error.person.person.display_fname}} {{error.person.person.display_lname}}</p>
+  <p><b>Устройство: </b>{{error.device.get_device_type_display}} {{error.device.model}}</p>
+  <p><b>Серийный номер устройства: </b>{{error.device.serial_number}}</p>
+  <p><b>Сообщение о неисправности: </b>{{error.message_error}}</p>
+  <p><b>Статус: {{error.get_status_display}}</b></p>
+  <p><b>Решение: {{error.solutions }}</b></p>
+  {% if error.image_error %}
+    <p>Скриншот: <a href="{{error.image_error.url}}" target="_blank"><img src="{{error.image_error.url}}" width='35%' height='35%' alt='Скриншот'></a></p>
+  {% endif %}
+</div>
+
+  </div>
+  </div>
+
+  </div>
+{% endblock %}

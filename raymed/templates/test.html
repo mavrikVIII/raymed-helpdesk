@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block title %} Все что есть {% endblock%}
+
+{% block main %}
+
+
+ {% endblock %}
+
+{% block content %}
+
+
+{% if all_person %}
+      {% for i in all_person %}
+            <h3>{{ i }}
+            {{ i.device_set.count }} </h3>
+
+
+             {% if i.device_set.count > 0 %}
+                {% for j in i.device_set.all %}
+                  <p>  <b> Модель: </b> {{ j.model }};  <b>Тип устройства:</b> {{j.device_type }};  <b>Серийный номер:</b> {{ j.serial_number }};  </p>
+                {% endfor %}
+            {% else %}
+                <p>У Сотрудника нет едениц техники </p>
+            {% endif %}
+
+
+      {% endfor %}
+
+
+
+{% else %}
+    <p> Пока нет пользователей </p>
+{% endif %}
+
+{% if device_without_person %}
+    <h3>Техника без владельца\На складе </h3>
+    {% for i in device_without_person %}
+      <p>  <b> Модель: </b> {{ i.model }} ; <b>Тип устройства:</b> {{i.device_type }};  <b>Серийный номер:</b> {{ i.serial_number }} ;</p>
+    {% endfor %}
+{% endif %}
+
+--------------
+{% for i in all_person %}
+  <!-- {{i}} <br> -->
+    {% for j in i.device_set.all %}
+        {% if j.model == search_type_device %}
+
+            {{ j.model }} <br>
+        {% endif %}
+    {% endfor %}
+{% endfor %}
+
+
+
+{% endblock %}
+<!-- Тестовый коммент №1 -->
+<!-- Тестовый коммент №2 -->

@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %} Добавление устройства {% endblock%}
+
+{% block main %}
+
+<!-- Добавление устройства через Устройства - добавить устройство -->
+
+<div class="container-fluid">
+  <!-- Content here -->
+  <div class="row justify-content-center">
+
+    <div class="col col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-5 col-xxl-4">
+      <h3 style="margin-bottom: 2%" align="center">Добавление устройства</h3>
+      <form action="{% url 'raymedasset:add_subdevice' device_id %}" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <table>
+          {% for field in form %}
+          <div class="form-group">
+            {{ field.label_tag}} {{field}}
+            <small class="text-danger">{{ field.errors }}</small>
+            <small class="text-dark"> {{field.help_text}}</small>
+          </div>
+          {% endfor %}
+        </table>
+        <button type="submit" name="button" class="btn btn-block btn-success" style='margin-bottom:10%'>Добавить</button>
+      </form>
+    </div>
+    <br>
+    <br>
+
+  </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block title %} Информация о сотруднике {% endblock%}
+
+{% block main %}
+
+<div class="container-fluid">
+  <div class="row justify-content-center">
+    <div class="col col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-8 col-xxl-7" style="border-radius: 10px">
+
+
+      <!-- ---------------------------------------------- -->
+      <table class="table table-bordered" style = "margin-top:2%">
+        <thead class="thead-light">
+          <tr align='center'>
+            <th>Фамилия</th>
+            <th>Имя</th>
+            <th>Отчество</th>
+            <th>Отдел</th>
+          {% if is_admin %}
+          <th>кол-во техники</th>
+          {% endif %}
+          </tr>
+        </thead>
+
+        {% for person in all_person %}
+        <tr align='center'>
+          <td><a href="{% url 'raymedasset:detail_person' person.id %}">{{person.display_lname}}</a></td>
+          <td><a href="{% url 'raymedasset:detail_person' person.id %}"> {{person.display_fname}}</a> </td>
+          <td><a href="{% url 'raymedasset:detail_person' person.id %}">  {{person.display_mname}} </a></td>
+          {% if person.department %}
+            <td><a href="{% url 'raymedasset:see_all_this_department' person.department %}">{{person.get_department_display}}</a></td>
+          {% else %}
+            <td>-</td>
+          {% endif %}
+          
+          {% if is_admin %}
+          <td>{{person.device_set.count}}</td>
+        {% endif %}
+        </tr>
+        {% endfor %}
+        <hr>
+        <tr align = 'center'>
+          <td colspan="4"> <b>Всего {{count_person}} сотрудников</b>  </td>
+        </tr>
+      </table>
+
+    </div>
+  </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,220 @@
+{% extends 'base.html' %}
+
+{% block title %} Информация о сотруднике {% endblock%}
+
+{% block main %}
+
+<!-- Если пользователь не из кадров то -->
+{% if not is_hr %}
+<div class="container-fluid">
+
+  <div class="row justify-content-center">
+    <!-- <div class="col-2" style='margin-top:2%'> -->
+      <!-- <img src="https://raymedtgpvt.sharepoint.com/sites/raymed2/Shared%20Documents/BD!.jpg" height="150px" width="150px" alt='Я'> -->
+    <div class="col col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl col-xxl-7" style="border-radius: 10px; margin-top:2%; margin-right:2%">
+      <img src="{{name_person.image.url}}" height="150px" width="150px" alt='Я'>
+      <br>
+      <b>Фамилия : </b> {{name_person.display_lname}} <br>
+      <b>Имя: </b>{{name_person.display_fname}}<br>
+      <b> Отчество:</b> {{name_person.display_mname}}<br>
+      {% if name_person.department %}
+        <b>Отдел : </b> <a href="{% url 'raymedasset:see_all_this_department' name_person.department %}">{{name_person.get_department_display}}</a> <br>
+      {% else %}
+        <b>Отдел : </b> - <br>
+      {% endif %}
+      <b>Количество устройств: </b> {{name_person.device_set.count}}<br>
+      {% if is_hr %}
+      <b>Серия паспорта</b>: {{name_person.serial_pasport}} <br>
+      <b>Номер паспорта</b>: {{name_person.number_pasport}} <br>
+      {% endif %}
+      <br>
+      {% if is_admin %}
+      <hr>
+      <a href="{% url 'raymedasset:add_device_page_this_person' name_person.id %}"><b>Добавить устройство сотруднику</b></a>
+      <!-- <a href="{{name_person.image}}" download>Скачать</a> -->
+      {% endif %}
+      {% if not is_buh %}
+      <hr>
+      <a href="{% url 'raymedasset:edit_person' name_person.id %}"><b>Редактировать данные сотрудника</b></a>
+      {% endif %}
+    </div>
+
+    <div class="col col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-10 col-xxl-7" style="border-radius: 10px;margin-right:2%">
+
+      {% if name_person.device_set.count == 0 %}
+      <h4 style="margin-top:5%" align='center'>У сотрудника нет единиц техники</h4>
+      {% else %}
+      <table class="table table-hover" style="margin-top:3%" >
+        <thead class="thead-light">
+          <tr align='center'>
+            <th></th>
+            <th style ="vertical-align:middle" width="8%"><b>Тип устройства</b></th>
+            <th><b>Модель устройства</b></th>
+            <th width="10%"><b>Серийный номер</b></th>
+            <th width="21%"><b>Описание</b></th>
+            <th><b>Организация</b></th>
+            <th width="10%"><b>Номер счета</b></th>
+            <th>Документ</th>
+            <th></th>
+          </tr>
+        </thead>
+
+        {% for i in name_person.device_set.all %}
+          <tr align='center'>
+            {% if i.device_type == "monoblock" or  i.device_type == "laptop" or  i.device_type == "desktop"  %}
+              <td><a href="{% url 'raymedasset:add_subdevice' i.id %}"><img src="/media/images/plus.png" alt="img" width="20px" height="20px"></a> {{i.type_device}}</td>
+            {% else %}
+              <td></td>
+            {% endif %}
+            <td><a href="{% url 'raymedasset:see_all_this_type_device' i.device_type %}">{{i.get_device_type_display}}</a></td>
+            <td><a href="{% url 'raymedasset:history_move_this_device' i.id %}"> {{i.model }} </a></td>
+            <td> {{i.serial_number}}</td>
+            <td>{{i.descriptions}}</td>
+            <td>{{i.get_organization_display}}</td>
+            {% if i.number_account %}
+                <td><a href="{% url 'raymedasset:see_device_for_number_account' i.number_account %}">{{i.display_number_account}}</a></td>
+            {% else %}
+                <td>-</td>
+            {% endif %}
+            {% if i.closed_document %}
+                <td><a href="{{i.closed_document.url}}" target="_blank">Документ</a></td>
+            {% else %}
+                <td>Отсутствует</td>
+            {% endif %}
+
+            {% if not is_hr %}
+                <td><a href="{% url 'raymedasset:transfer_device' i.id %}"><img src="/media/images/pencil.png" alt="img" width="20px" height="20px"></a> </td>
+            {% endif %}
+          </tr>
+          {% if i.subdevice_set.all %}
+            {% for j in i.subdevice_set.all %}
+            <tr align='center'>
+              <td> </td>
+              <td></td>
+              <td><b>{{j.get_type_display}}</b> {{j.model }}</td>
+              <td> {{j.serial_number}}</td>
+              <td>{{j.descriptions}}</td>
+              <td>{{i.get_organization_display}}</td>
+              {% if j.number_account %}
+                  <td><a href="{% url 'raymedasset:see_device_for_number_account' j.number_account %}">{{j.display_number_account}}</a></td>
+              {% else %}
+                  <td>-</td>
+              {% endif %}
+              {% if j.closed_document %}
+                  <td><a href="{{j.closed_document.url}}" target="_blank">Документ</a></td>
+              {% else %}
+                  <td>Отсутствует</td>
+              {% endif %}
+
+              {% if not is_hr %}
+                  <td><a href="{% url 'raymedasset:transfer_subdevice' j.id %}"><img src="/media/images/pencil.png" alt="img" width="20px" height="20px"></a> </td>
+              {% endif %}
+            </tr>
+            {% endfor %}
+          {% endif %}
+          {% endfor %}
+
+
+      </table>
+
+
+      <!--  -->
+
+
+      <hr>
+      <table class="table" style='margin-top:5%'>
+        <thead class="thead-light">
+          <tr align="center">
+            <th>Кол-во стационарных ПК</th>
+            <th>Кол-во ноутбуков</th>
+            <th>Кол-во мониторов</th>
+            <th>Кол-во моноблоков</th>
+            <th>Кол-во внешних HDD</th>
+            <th>Кол-во флешек</th>
+          </tr>
+        </thead>
+        <tr align="center">
+          <td>{{amount_desktop}}</td>
+          <td>{{amount_laptop}}</td>
+          <td>{{amount_monitor}}</td>
+          <td>{{amount_monoblock}}</td>
+          <td>{{amount_ex_disk}}</td>
+          <td>{{amount_flash}}</td>
+        </tr>
+      </table>
+      {% endif %}
+
+    </div>
+    <div class="col-2">
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- Если пользователь ИЗ КАДРОВ!!! -->
+{% else %}
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col col-xs-6 col-sm-6 col-md-5 col-lg-4 col-xl-2 col-xxl-2" style='margin-top:3%;' >
+            <img src="{{name_person.image.url}}" height="250px" width="250px" alt='Я'> <br><br>
+              <a href="{% url 'raymedasset:edit_person' name_person.id %}" style='margin-top:3%' ><b>Редактировать данные сотрудника</b></a>
+        </div>
+
+        <div class="col col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-7 col-xxl-7" style='margin-top:1.5%;'>
+          <table class="table table-bordered" style="margin-top:3%" >
+            <thead class="thead-light">
+              <tr align='center'>
+                <th width="25%"><b>Фамилия</b></th>
+                <td > {{name_person.last_name}}</td>
+              </tr>
+                <tr align='center'>
+                <th width="25%"><b>Имя</b></th>
+                <td>{{name_person.first_name}}</td>
+              </tr>
+              <tr align='center'>
+                <th width="25%"><b>Отчество</b></th>
+                <td>{{name_person.middle_name}}</td>
+              </tr>
+              <tr align='center'>
+                <th width="25%"><b>Дата рождения</b></th>
+                <td>{{name_person.date_birthday}}</td>
+              </tr>
+              <tr align='center'>
+                <th width="25%"><b>Отдел</b></th>
+                <td>{{name_person.get_department_display}}</td>
+              </tr>
+              <tr align='center'>
+                <th width="25%"><b>Серия паспорта</b></th>
+                <td>{{name_person.serial_pasport}}</td>
+              </tr>
+              <tr align='center'>
+                <th width="25%"><b>Номер паспорта</b></th>
+                <td>{{name_person.number_pasport}}</td>
+              </tr>
+              <tr align='center'>
+                <th width="25%"><b>Внутренний номер телефона</b></th>
+                <td>{{name_person.internal_number_phone}}</td>
+              </tr>
+              <tr align='center'>
+                <th width="25%"><b>Номер телефона</b></th>
+                {% if name_person.number_phone %}
+                <td>{{name_person.display_number_phone}}</td>
+                {% else %}
+                <td>-</td>
+                {% endif %}
+              </tr>
+            </thead>
+            </table>
+        </div>
+
+        <div class="col col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-3 col-xxl-7" >
+
+        </div>
+
+  </div>
+  </div>
+
+{% endif %}
+{% endblock %}

@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block title %} Поиск по имени {% endblock%}
+
+{% block main %}
+<h4 style='margin-left:5%; margin-top:40px'>Поиск по имени: {{search_first_name}} {{search_last_name}} </h4>
+
+<div class="container-fluid">
+  <div class="row justify-content-center">
+    <div class="col col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 col-xxl-6" style="border-radius: 10px">
+      <table class="table" align="center">
+          <thead class="thead-light">
+            <tr>
+              <th>id</th>
+              <th>Фамилия</th>
+              <th>Имя</th>
+              <th>Отчество</th>
+            </tr>
+          </thead>
+        <tbody>
+          {% for i in list_person %}
+          <tr>
+            <th>{{i.id}}</th>
+            <td><a href="{% url 'raymedasset:detail_person' i.id %}"> {{i.display_lname}} </a></td>
+            <td><a href="{% url 'raymedasset:detail_person' i.id %}"> {{i.display_fname}} </a></td>
+            <td>
+              {% if i.middle_name %}
+              <a href="{% url 'raymedasset:detail_person' i.id %}"> {{i.display_mname}} </a>
+              {% else %}
+              -
+              {% endif %}
+            </td>
+          </tr>
+
+          {% endfor %}
+        </tbody>
+      </table>
+
+    </div>
+
+  </div>
+</div>
+{% endblock %}
